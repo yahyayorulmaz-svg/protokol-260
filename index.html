@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROTOKOL 260 — Canlı Senkronize Panel</title>
+<title>PROTOKOL 260 — Canlı Takip & Vücut Ölçüm Paneli</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=VoRMbuu7ptXA8_mCvwIcN4tYKzXfSliYFBmNR7kiMk_kgxqY9xC5sAf84ZK-5QLxKQ7jIJHkDSaVFYXJffk6XfDS2_oh_qaq93LKJS1_XRvzsu99_mBo51gjukGXvKgzfSshmn2i2fYi1sqqzom2fFqGifLnhXXm0HPUZw2iIlyg6U7s8J-tVEcG8z4qowBLG52qliXnCMvWNDQE_8-wOnyeoZRL_usVI3VHDwr11CZfyD9OrfdGvNR7563lXNJX_Z5A2X6CPj4zGcSQAa4kNp_2LntuEz9aG6tbgqGIx5S15NwPCqaBCjQX_B5mU0NmTxlJaQGSihg51B6gqkRmPQ" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jb250cmlidXRpb24udXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9jPUNneGlZWEprWDNOMGIzSmhaMlVTVUJJTmNtVnpjRzl1YzJWZlpHRjBZUm9fQ2pCaU5qRTFPR0ZtT0Rrek9EaGpNMlUwTURBd05qVmhORFF6WlRSaFpUQXlaREEwWkdJd01EQXhaalF3WXpCbVpETVNDeElIRUx5RWxfM0xEUmdCJmZpbGVuYW1lPXByb3Rva29sXzI2MGd1bl92Ml9zZW5rcm9uLmh0bWwmb3BpPTEwMzEzNTA1MA"/><style>
+<style>
 :root {
   --bg: #08090e;
   --surface: #11141d;
@@ -51,7 +51,6 @@ body {
   gap: 12px;
 }
 
-/* TOP BAR */
 .top-nav {
   display: flex;
   justify-content: space-between;
@@ -128,7 +127,6 @@ body {
   border-color: #2b3548;
 }
 
-/* OVERALL PROGRESS COMPACT */
 .progress-card {
   background: var(--surface);
   border: 1px solid var(--surface-border);
@@ -199,7 +197,6 @@ body {
   color: #f87171;
 }
 
-/* TODAY SINGLE FOCUS CARD */
 .day-card {
   background: linear-gradient(180deg, #161b26 0%, #11141d 100%);
   border: 1.5px solid #232b3d;
@@ -272,7 +269,6 @@ body {
   font-weight: 600;
 }
 
-/* DAILY BODY FAT BADGE */
 .daily-bf-pill {
   display: inline-flex;
   align-items: center;
@@ -300,7 +296,6 @@ body {
   margin-top: 3px;
 }
 
-/* METRICS STRIP */
 .info-strip {
   background: #0c0f16;
   border: 1px solid #1b2230;
@@ -339,7 +334,6 @@ body {
   margin-top: 2px;
 }
 
-/* BIG SINGLE DIET ACTION TOGGLE */
 .single-action-btn {
   display: flex;
   align-items: center;
@@ -362,7 +356,6 @@ body {
   color: #34d399;
 }
 
-/* MEASUREMENTS 2x2 CLEAN GRID */
 .measurements-box {
   background: #0b0e15;
   border: 1px solid #1e2637;
@@ -426,7 +419,6 @@ body {
   border-color: var(--accent-cyan);
 }
 
-/* NAVY RESULT CARD */
 .navy-result-card {
   background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(16, 185, 129, 0.12) 100%);
   border: 1px solid rgba(6, 182, 212, 0.35);
@@ -470,7 +462,6 @@ body {
   font-weight: 700;
 }
 
-/* INPUTS & DEBT DISPLAY */
 .inputs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -508,7 +499,6 @@ body {
   margin-top: 2px;
 }
 
-/* QUICK PHASE JUMPER */
 .jumper-card {
   background: var(--surface);
   border: 1px solid var(--surface-border);
@@ -548,7 +538,6 @@ body {
   color: var(--text-main);
 }
 
-/* BOTTOM ACTIONS */
 .bottom-btns-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -576,7 +565,6 @@ body {
   color: #60a5fa;
 }
 
-/* TOAST */
 .toast {
   position: fixed;
   bottom: 20px;
@@ -599,7 +587,6 @@ body {
 
 <div class="container">
 
-  <!-- TOP NAV -->
   <div class="top-nav">
     <div class="brand">
       <span>⚔️ PROTOKOL</span>
@@ -614,7 +601,6 @@ body {
     </div>
   </div>
 
-  <!-- OVERALL PROGRESS COMPACT -->
   <div class="progress-card">
     <div class="progress-header">
       <div>
@@ -642,7 +628,6 @@ body {
     </div>
   </div>
 
-  <!-- TODAY / ACTIVE DAY FOCUS CARD -->
   <div class="day-card" id="dayCard">
     <div class="day-header">
       <button class="nav-arrow" onclick="changeDay(-1)">‹</button>
@@ -658,7 +643,6 @@ body {
       <button class="nav-arrow" onclick="changeDay(1)">›</button>
     </div>
 
-    <!-- METRICS STRIP -->
     <div class="info-strip">
       <div>
         <div class="target-kilo-lbl">Hedef Kilo</div>
@@ -670,13 +654,11 @@ body {
       </div>
     </div>
 
-    <!-- SINGLE DIET ACTION TOGGLE -->
     <button class="single-action-btn" id="btnTavuk" onclick="toggleDietAction()">
       <span id="iconTavuk">⚪</span>
       <span>🍗 DİYETE EKSİKSİZ UYULDU</span>
     </button>
 
-    <!-- MEASUREMENTS & US NAVY METHOD SECTION (2x2 GRID) -->
     <div class="measurements-box">
       <div class="box-header">
         <div class="box-title">📐 Vücut Ölçüleri & Navy Yağ Oranı</div>
@@ -684,12 +666,10 @@ body {
       </div>
       
       <div class="measurements-grid-2x2">
-        <!-- SOL SÜTUN: BOYUN & KOL -->
         <div class="m-input-wrap">
           <label class="m-input-lbl">Boyun (cm)</label>
           <input type="number" step="0.5" class="m-input" id="inputNeck" placeholder="Örn: 40" onchange="saveMeasurementInput()">
         </div>
-        <!-- SAĞ SÜTUN: BEL & OMUZ -->
         <div class="m-input-wrap">
           <label class="m-input-lbl">Bel (cm)</label>
           <input type="number" step="0.5" class="m-input" id="inputWaist" placeholder="Örn: 95" onchange="saveMeasurementInput()">
@@ -704,7 +684,6 @@ body {
         </div>
       </div>
 
-      <!-- LIVE ANTHROPOMETRIC RESULT CARD -->
       <div class="navy-result-card" id="navyResultCard">
         <div class="navy-main-row">
           <span class="navy-val-title">Ölçülen Gerçek Yağ:</span>
@@ -718,7 +697,6 @@ body {
       </div>
     </div>
 
-    <!-- INPUTS -->
     <div class="inputs-grid">
       <div class="field-wrap">
         <label class="field-lbl">Tartı Kilon (kg)</label>
@@ -732,7 +710,6 @@ body {
     </div>
   </div>
 
-  <!-- QUICK PHASE JUMPER -->
   <div class="jumper-card">
     <div class="jumper-title">🎯 Faz Kısayolları</div>
     <div class="jumper-scroll">
@@ -747,7 +724,6 @@ body {
     </div>
   </div>
 
-  <!-- BOTTOM ACTIONS (REFRESH FROM SHEET & OPEN SHEET) -->
   <div class="bottom-btns-row">
     <button class="action-link-btn" onclick="pullDataFromSheets(true)">
       <span>🔄</span>
@@ -764,17 +740,16 @@ body {
 <div class="toast" id="toast">Kaydedildi! ⚡</div>
 
 <script>
-const START_DATE = new Date(2026, 7, 29); // 29 August 2026
+const START_DATE = new Date(2026, 7, 29);
 const TOTAL_DAYS = 260;
-const FIXED_HEIGHT = 194.0; // cm
-const BIRTHDAY = new Date(2004, 1, 14); // 14 Feb 2004
+const FIXED_HEIGHT = 194.0;
+const BIRTHDAY = new Date(2004, 1, 14);
 const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxQttyLeh1Xv764O131HXost32VBDQEJU0wV1aJ9M6guwh8fxg09AQHN2l7Y_LS7e4I/exec";
-const BASE_DEFICIT = 1050; // Faz 4 daily deficit baseline
+const BASE_DEFICIT = 1050;
 
 let currentDay = 1;
 let localStore = JSON.parse(localStorage.getItem("protokol_260_master_final_store") || "{}");
 
-// Dynamic age calculation
 function getDynamicAge(targetDate) {
   let age = targetDate.getFullYear() - BIRTHDAY.getFullYear();
   const m = targetDate.getMonth() - BIRTHDAY.getMonth();
@@ -784,7 +759,6 @@ function getDynamicAge(targetDate) {
   return age;
 }
 
-// Exact daily body fat & weight calculation
 function calculateDay(dayNum) {
   const d = new Date(START_DATE);
   d.setDate(d.getDate() + (dayNum - 1));
@@ -870,7 +844,6 @@ function calculateDay(dayNum) {
   };
 }
 
-// Anthropometrics calculation
 function calculateAnthropometrics(waist, neck, shoulder, arm, weight, height) {
   if (!waist || !neck || waist <= neck) return null;
   
@@ -950,7 +923,6 @@ function renderUI() {
   document.getElementById("inputArm").value = dData.arm !== undefined ? dData.arm : "";
   document.getElementById("inputShoulder").value = dData.shoulder !== undefined ? dData.shoulder : "";
 
-  // Calculate & render Anthropometrics
   const navyCard = document.getElementById("navyResultCard");
   const navyActualVal = document.getElementById("navyActualVal");
   const navyDiffText = document.getElementById("navyDiffText");
@@ -990,7 +962,6 @@ function renderUI() {
     navyCard.classList.remove("active");
   }
 
-  // Day debt text
   const debtEl = document.getElementById("dayDebtText");
   if (dData.cheat && Number(dData.cheat) > 0) {
     const dayDebt = (Number(dData.cheat) / BASE_DEFICIT).toFixed(2);
