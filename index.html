@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PROTOKOL 260 — Canlı Senkronize Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=VoRMbuu7ptXA8_mCvwIcN4tYKzXfSliYFBmNR7kiMk_kgxqY9xC5sAf84ZK-5QLxKQ7jIJHkDSaVFYXJffk6XfDS2_oh_qaq93LKJS1_XRvzsu99_mBo51gjukGXvKgzfSshmn2i2fYi1sqqzom2fFqGifLnhXXm0HPUZw2iIlyg6U7s8J-tVEcG8z4qowBLG52qliXnCMvWNDQE_8-wOnyeoZRL_usVI3VHDwr11CZfyD9OrfdGvNR7563lXNJX_Z5A2X6CPj4zGcSQAa4kNp_2LntuEz9aG6tbgqGIx5S15NwPCqaBCjQX_B5mU0NmTxlJaQGSihg51B6gqkRmPQ" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jb250cmlidXRpb24udXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9jPUNneGlZWEprWDNOMGIzSmhaMlVTVUJJTmNtVnpjRzl1YzJWZlpHRjBZUm9fQ2pCaU5qRTFPR0ZtT0Rrek9EaGpNMlUwTURBd05qVmhORFF6WlRSaFpUQXlaREEwWkdJd01EQXhaalF3WXpCbVpETVNDeElIRUx5RWxfM0xEUmdCJmZpbGVuYW1lPXByb3Rva29sXzI2MGd1bl92Ml9zZW5rcm9uLmh0bWwmb3BpPTEwMzEzNTA1MA"/><style>
+:root {
+  --bg: #08090e;
+  --surface: #11141d;
+  --surface-border: #1d2433;
+  --surface-hover: #171c2a;
+  --accent-green: #10b981;
+  --accent-green-glow: rgba(16, 185, 129, 0.22);
+  --accent-orange: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-purple: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 12px 30px 12px;
+}
+
+.container {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* TOP BAR */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 2px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+}
+.live-badge {
+  background: var(--accent-green-glow);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.live-badge.syncing {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+}
+.live-badge.error {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+.sync-dot {
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.4; transform: scale(0.9); }
+}
+
+.top-actions {
+  display: flex;
+  gap: 6px;
+}
+.icon-btn {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  color: var(--text-muted);
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.icon-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+  border-color: #2b3548;
+}
+
+/* OVERALL PROGRESS COMPACT */
+.progress-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.p-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+.p-pct {
+  font-size: 21px;
+  font-weight: 900;
+  color: var(--accent-green);
+}
+.bar-track {
+  width: 100%;
+  height: 6px;
+  background: #181e2b;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+.stat-pill {
+  background: #0d1017;
+  border: 1px solid #1a2130;
+  padding: 6px 8px;
+  border-radius: 9px;
+  text-align: center;
+}
+.stat-pill.debt-pill {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.08);
+}
+.s-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+.s-val {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+.s-val.debt-val {
+  color: #f87171;
+}
+
+/* TODAY SINGLE FOCUS CARD */
+.day-card {
+  background: linear-gradient(180deg, #161b26 0%, #11141d 100%);
+  border: 1.5px solid #232b3d;
+  border-radius: var(--radius);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+.day-card.tavuk-active {
+  border-color: #10b981;
+  background: linear-gradient(180deg, #0e241c 0%, #0a1713 100%);
+  box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.25);
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-arrow {
+  background: #1c2230;
+  border: 1px solid #2a3449;
+  color: var(--text-main);
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+}
+.nav-arrow:hover {
+  background: #252e42;
+}
+.day-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.day-code-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.day-code {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+.phase-badge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+.day-date-str {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* DAILY BODY FAT BADGE */
+.daily-bf-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+
+.today-back-btn {
+  background: var(--accent-green);
+  color: #000;
+  border: none;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 3px;
+}
+
+/* METRICS STRIP */
+.info-strip {
+  background: #0c0f16;
+  border: 1px solid #1b2230;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.day-card.tavuk-active .info-strip {
+  background: #091712;
+  border-color: #164333;
+}
+.target-kilo-val {
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--accent-green);
+}
+.target-kilo-lbl {
+  font-size: 9px;
+  color: var(--text-dim);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.diet-tag-val {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-main);
+  text-align: right;
+}
+.deficit-tag-val {
+  font-size: 9.5px;
+  color: var(--accent-orange);
+  font-weight: 700;
+  text-align: right;
+  margin-top: 2px;
+}
+
+/* BIG SINGLE DIET ACTION TOGGLE */
+.single-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 10px;
+  background: #0e111a;
+  border: 1.5px solid #202636;
+  border-radius: 13px;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.single-action-btn.active-tavuk {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: #10b981;
+  color: #34d399;
+}
+
+/* MEASUREMENTS 2x2 CLEAN GRID */
+.measurements-box {
+  background: #0b0e15;
+  border: 1px solid #1e2637;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.box-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  letter-spacing: 0.5px;
+}
+.profile-tag {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
+.measurements-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.m-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.m-input-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.m-input {
+  background: #11151f;
+  border: 1px solid #232d40;
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 8px 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  outline: none;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.m-input:focus {
+  border-color: var(--accent-cyan);
+}
+
+/* NAVY RESULT CARD */
+.navy-result-card {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(16, 185, 129, 0.12) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+}
+.navy-result-card.active {
+  display: flex;
+}
+.navy-main-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navy-val-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+}
+.navy-actual-val {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+}
+.navy-sub-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: var(--text-dim);
+  font-weight: 700;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 4px;
+  margin-top: 2px;
+}
+.navy-diff-text {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* INPUTS & DEBT DISPLAY */
+.inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.field-lbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.num-input {
+  background: #0b0e14;
+  border: 1px solid #1d2536;
+  border-radius: 10px;
+  color: var(--text-main);
+  padding: 9px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.num-input:focus {
+  border-color: var(--accent-green);
+}
+.day-debt-indicator {
+  font-size: 9.5px;
+  color: #f87171;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* QUICK PHASE JUMPER */
+.jumper-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.jumper-title {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.jumper-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.jumper-scroll::-webkit-scrollbar { display: none; }
+.j-pill {
+  flex: 0 0 auto;
+  background: #0d1017;
+  border: 1px solid #1c2333;
+  padding: 5px 9px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.j-pill:hover {
+  background: #182030;
+  color: var(--text-main);
+}
+
+/* BOTTOM ACTIONS */
+.bottom-btns-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.action-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #131722;
+  border: 1.5px solid #222a3d;
+  color: var(--text-main);
+  padding: 11px 8px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.action-link-btn:hover {
+  background: #1b2130;
+  border-color: #3b82f6;
+  color: #60a5fa;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  background: var(--accent-green);
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 7px 16px;
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <div class="brand">
+      <span>⚔️ PROTOKOL</span>
+      <div class="live-badge" id="liveBadge" onclick="pullDataFromSheets(true)" title="Tablodan Verileri Yenile">
+        <div class="sync-dot"></div>
+        <span id="syncStatus">BAĞLANILIYOR...</span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="pullDataFromSheets(true)" title="Tablodan Verileri Çek">🔄</button>
+      <a href="https://docs.google.com/spreadsheets/d/1plcDnihtTA7X0Y1KiOKo1MKZKkbxqH1Xj5zSdNFMFnU/edit?gid=1985801109#gid=1985801109" target="_blank" class="icon-btn" title="Google E-Tabloyu Aç">📊</a>
+    </div>
+  </div>
+
+  <!-- OVERALL PROGRESS COMPACT -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <div>
+        <div class="p-label">260 Günlük Maraton</div>
+        <div style="font-size: 10.5px; color: var(--text-dim); font-weight: 700;" id="dayCounter">0 / 260 Gün</div>
+      </div>
+      <div class="p-pct" id="totalPct">0.0%</div>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="progressBar"></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill">
+        <div class="s-label">🍗 Diyet Uyumu</div>
+        <div class="s-val" id="dietPct">0%</div>
+      </div>
+      <div class="stat-pill">
+        <div class="s-label">🔥 Toplam Kaçamak</div>
+        <div class="s-val" id="totalCheatVal">0 kcal</div>
+      </div>
+      <div class="stat-pill debt-pill">
+        <div class="s-label" style="color: #f87171;">🚨 Borç Gün</div>
+        <div class="s-val debt-val" id="totalDebtVal">0.00 GÜN</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODAY / ACTIVE DAY FOCUS CARD -->
+  <div class="day-card" id="dayCard">
+    <div class="day-header">
+      <button class="nav-arrow" onclick="changeDay(-1)">‹</button>
+      <div class="day-center">
+        <div class="day-code-wrap">
+          <span class="day-code" id="dayCode">G001</span>
+          <span class="phase-badge" id="phaseBadge">FAZ 1</span>
+        </div>
+        <div class="day-date-str" id="dayDateStr">29 Ağustos 2026 (Cumartesi)</div>
+        <div class="daily-bf-pill" id="dailyBfPill">🔥 Hedef Yağ: %23.0</div>
+        <button class="today-back-btn" id="todayBackBtn" onclick="goToToday()" style="display:none;">BUGÜNE DÖN</button>
+      </div>
+      <button class="nav-arrow" onclick="changeDay(1)">›</button>
+    </div>
+
+    <!-- METRICS STRIP -->
+    <div class="info-strip">
+      <div>
+        <div class="target-kilo-lbl">Hedef Kilo</div>
+        <div class="target-kilo-val" id="targetKilo">102.00 kg</div>
+      </div>
+      <div>
+        <div class="diet-tag-val" id="dietTag">0 kcal (Su Orucu)</div>
+        <div class="deficit-tag-val" id="deficitTag">-2.350 kcal Açık</div>
+      </div>
+    </div>
+
+    <!-- SINGLE DIET ACTION TOGGLE -->
+    <button class="single-action-btn" id="btnTavuk" onclick="toggleDietAction()">
+      <span id="iconTavuk">⚪</span>
+      <span>🍗 DİYETE EKSİKSİZ UYULDU</span>
+    </button>
+
+    <!-- MEASUREMENTS & US NAVY METHOD SECTION (2x2 GRID) -->
+    <div class="measurements-box">
+      <div class="box-header">
+        <div class="box-title">📐 Vücut Ölçüleri & Navy Yağ Oranı</div>
+        <div class="profile-tag" id="profileTag">194 cm | 22 Yaş</div>
+      </div>
+      
+      <div class="measurements-grid-2x2">
+        <!-- SOL SÜTUN: BOYUN & KOL -->
+        <div class="m-input-wrap">
+          <label class="m-input-lbl">Boyun (cm)</label>
+          <input type="number" step="0.5" class="m-input" id="inputNeck" placeholder="Örn: 40" onchange="saveMeasurementInput()">
+        </div>
+        <!-- SAĞ SÜTUN: BEL & OMUZ -->
+        <div class="m-input-wrap">
+          <label class="m-input-lbl">Bel (cm)</label>
+          <input type="number" step="0.5" class="m-input" id="inputWaist" placeholder="Örn: 95" onchange="saveMeasurementInput()">
+        </div>
+        <div class="m-input-wrap">
+          <label class="m-input-lbl">Kol (cm)</label>
+          <input type="number" step="0.5" class="m-input" id="inputArm" placeholder="Örn: 41" onchange="saveMeasurementInput()">
+        </div>
+        <div class="m-input-wrap">
+          <label class="m-input-lbl">Omuz (cm)</label>
+          <input type="number" step="0.5" class="m-input" id="inputShoulder" placeholder="Örn: 130" onchange="saveMeasurementInput()">
+        </div>
+      </div>
+
+      <!-- LIVE ANTHROPOMETRIC RESULT CARD -->
+      <div class="navy-result-card" id="navyResultCard">
+        <div class="navy-main-row">
+          <span class="navy-val-title">Ölçülen Gerçek Yağ:</span>
+          <span class="navy-actual-val" id="navyActualVal">%0.0</span>
+        </div>
+        <div class="navy-diff-text" id="navyDiffText">Hedef ile durum...</div>
+        <div class="navy-sub-stats" id="navySubStats">
+          <span id="vTaperStat">V-Taper (Omuz/Bel): -</span>
+          <span id="leanMassStat">Tahmini Yağsız Kütle: -</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="inputs-grid">
+      <div class="field-wrap">
+        <label class="field-lbl">Tartı Kilon (kg)</label>
+        <input type="number" step="0.1" class="num-input" id="inputWeight" placeholder="Örn: 101.4" onchange="saveWeightInput()">
+      </div>
+      <div class="field-wrap">
+        <label class="field-lbl">Bozdun Mu? (+kcal)</label>
+        <input type="number" step="50" class="num-input" id="inputCheat" placeholder="Örn: 500" onchange="saveCheatInput()">
+        <div class="day-debt-indicator" id="dayDebtText"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK PHASE JUMPER -->
+  <div class="jumper-card">
+    <div class="jumper-title">🎯 Faz Kısayolları</div>
+    <div class="jumper-scroll">
+      <div class="j-pill" onclick="viewDay(1)">Faz 1: Su Orucu (G01)</div>
+      <div class="j-pill" onclick="viewDay(3)">Faz 2: 0 Karb (G03)</div>
+      <div class="j-pill" onclick="viewDay(13)">Faz 3: Flush Kardiyo (G13)</div>
+      <div class="j-pill" onclick="viewDay(17)">Faz 4: 150g Pirinç (G17)</div>
+      <div class="j-pill" onclick="viewDay(75)">🏆 %12 Yağ (G75)</div>
+      <div class="j-pill" onclick="viewDay(76)">Faz 5: Reverse (G76)</div>
+      <div class="j-pill" onclick="viewDay(111)">Faz 6: Clean Bulk (G111)</div>
+      <div class="j-pill" onclick="viewDay(260)">👑 260. Gün Final</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ACTIONS (REFRESH FROM SHEET & OPEN SHEET) -->
+  <div class="bottom-btns-row">
+    <button class="action-link-btn" onclick="pullDataFromSheets(true)">
+      <span>🔄</span>
+      <span>Tablodan Veri Çek</span>
+    </button>
+    <a href="https://docs.google.com/spreadsheets/d/1plcDnihtTA7X0Y1KiOKo1MKZKkbxqH1Xj5zSdNFMFnU/edit?gid=1985801109#gid=1985801109" target="_blank" class="action-link-btn">
+      <span>📊</span>
+      <span>Google E-Tablo</span>
+    </a>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Kaydedildi! ⚡</div>
+
+<script>
+const START_DATE = new Date(2026, 7, 29); // 29 August 2026
+const TOTAL_DAYS = 260;
+const FIXED_HEIGHT = 194.0; // cm
+const BIRTHDAY = new Date(2004, 1, 14); // 14 Feb 2004
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxQttyLeh1Xv764O131HXost32VBDQEJU0wV1aJ9M6guwh8fxg09AQHN2l7Y_LS7e4I/exec";
+const BASE_DEFICIT = 1050; // Faz 4 daily deficit baseline
+
+let currentDay = 1;
+let localStore = JSON.parse(localStorage.getItem("protokol_260_master_final_store") || "{}");
+
+// Dynamic age calculation
+function getDynamicAge(targetDate) {
+  let age = targetDate.getFullYear() - BIRTHDAY.getFullYear();
+  const m = targetDate.getMonth() - BIRTHDAY.getMonth();
+  if (m < 0 || (m === 0 && targetDate.getDate() < BIRTHDAY.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+// Exact daily body fat & weight calculation
+function calculateDay(dayNum) {
+  const d = new Date(START_DATE);
+  d.setDate(d.getDate() + (dayNum - 1));
+  const dateStr = d.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", weekday: "long" });
+  const currentAge = getDynamicAge(d);
+  
+  let phase = "FAZ 1";
+  let phaseBg = "#6B7280";
+  let phaseColor = "#F3F4F6";
+  let targetWeight = 102.0;
+  let diet = "0 kcal (Su Orucu / Elektrolit)";
+  let deficit = "-2.350 kcal Açık";
+  let bfPct = 23.0;
+  
+  if (dayNum <= 2) {
+    phase = "FAZ 1: SU ORUCU";
+    phaseBg = "#6B7280";
+    phaseColor = "#F3F4F6";
+    targetWeight = 102.0 - ((dayNum - 1) * 0.40);
+    diet = "0 kcal (Su Orucu / Elektrolit)";
+    deficit = "-2.350 kcal Açık";
+    bfPct = 23.0 - ((dayNum - 1) * 0.30);
+  } else if (dayNum <= 12) {
+    phase = "FAZ 2: 0 KARB CUT";
+    phaseBg = "#1E3A8A";
+    phaseColor = "#BFDBFE";
+    targetWeight = 101.2 - ((dayNum - 3) * 0.19);
+    diet = "1.250 kcal (1kg Tavuk / 0 Karb)";
+    deficit = "-1.500 kcal Açık";
+    bfPct = 22.4 - ((dayNum - 3) * 0.19);
+  } else if (dayNum <= 16) {
+    phase = "FAZ 3: FLUSH KARDİYO";
+    phaseBg = "#991B1B";
+    phaseColor = "#FECACA";
+    targetWeight = 99.2 - ((dayNum - 13) * 0.55);
+    diet = "0 kcal (Su Orucu + 2000kcal Kardiyo)";
+    deficit = "-4.350 kcal Açık";
+    bfPct = 20.5 - ((dayNum - 13) * 0.35);
+  } else if (dayNum <= 75) {
+    phase = "FAZ 4: %12 İNİŞİ";
+    phaseBg = "#065F46";
+    phaseColor = "#A7F3D0";
+    const prog = (dayNum - 17) / 58;
+    targetWeight = 97.0 - (prog * (97.0 - 89.14));
+    diet = "1.700 kcal (1kg Tavuk + 150g Pirinç)";
+    deficit = "-1.050 kcal Açık";
+    bfPct = 19.1 - (prog * (19.1 - 12.0));
+  } else if (dayNum <= 110) {
+    const revW = Math.floor((dayNum - 76) / 7) + 1;
+    phase = `FAZ 5: REV (H${revW})`;
+    phaseBg = "#92400E";
+    phaseColor = "#FDE68A";
+    const carbs = 150 + (revW * 50);
+    const cals = 1700 + (revW * 200);
+    const prog5 = (dayNum - 75) / 35;
+    targetWeight = 89.14 - (prog5 * (89.14 - 87.14));
+    diet = `${cals} kcal (${carbs}g Pirinç)`;
+    deficit = revW <= 4 ? `-${1050 - (revW*200)} kcal Açık` : "Tam Bakım (0 Açık)";
+    bfPct = 12.0 - (prog5 * (12.0 - 9.9));
+  } else {
+    phase = "FAZ 6: CLEAN BULK";
+    phaseBg = "#4C1D95";
+    phaseColor = "#DDD6FE";
+    const p = (dayNum - 110) / 150;
+    targetWeight = 87.14 + (p * (93.37 - 87.14));
+    diet = "2.900 kcal (+150 kcal Surplus / 450g Pirinç)";
+    deficit = "+150 kcal Surplus";
+    bfPct = 9.9 + (p * (12.3 - 9.9));
+  }
+  
+  return {
+    dayNum,
+    dayCode: `G${String(dayNum).padStart(3, '0')}`,
+    dateStr,
+    currentAge,
+    bfPct: bfPct.toFixed(1),
+    phase,
+    phaseBg,
+    phaseColor,
+    targetWeight: targetWeight.toFixed(2),
+    diet,
+    deficit
+  };
+}
+
+// Anthropometrics calculation
+function calculateAnthropometrics(waist, neck, shoulder, arm, weight, height) {
+  if (!waist || !neck || waist <= neck) return null;
+  
+  const diff = waist - neck;
+  const logDiff = Math.log10(diff);
+  const logHeight = Math.log10(height);
+  const denom = 1.0324 - (0.19077 * logDiff) + (0.15456 * logHeight);
+  if (denom <= 0) return null;
+  
+  let bf = (495.0 / denom) - 450.0;
+  bf = Math.max(3.0, Math.min(50.0, bf));
+
+  let vTaper = null;
+  if (shoulder && waist && waist > 0) {
+    vTaper = (shoulder / waist).toFixed(2);
+  }
+
+  let lbm = null;
+  if (weight && weight > 0) {
+    lbm = (weight * (1 - (bf / 100))).toFixed(1);
+  }
+
+  return {
+    bf: bf.toFixed(1),
+    vTaper,
+    lbm
+  };
+}
+
+function getTodayIndex() {
+  const now = new Date();
+  const diffTime = now.getTime() - START_DATE.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  if (diffDays < 1) return 1;
+  if (diffDays > TOTAL_DAYS) return TOTAL_DAYS;
+  return diffDays;
+}
+
+function renderUI() {
+  const info = calculateDay(currentDay);
+  document.getElementById("dayCode").textContent = info.dayCode;
+  document.getElementById("dayDateStr").textContent = info.dateStr;
+  document.getElementById("profileTag").textContent = `194 cm | ${info.currentAge} Yaş`;
+  document.getElementById("dailyBfPill").textContent = `🔥 Hedef Yağ: %${info.bfPct}`;
+  document.getElementById("targetKilo").textContent = `${info.targetWeight} kg`;
+  document.getElementById("dietTag").textContent = info.diet;
+  document.getElementById("deficitTag").textContent = info.deficit;
+
+  const pBadge = document.getElementById("phaseBadge");
+  pBadge.textContent = info.phase;
+  pBadge.style.backgroundColor = info.phaseBg;
+  pBadge.style.color = info.phaseColor;
+
+  const todayIndex = getTodayIndex();
+  document.getElementById("todayBackBtn").style.display = (currentDay !== todayIndex) ? "inline-block" : "none";
+
+  const dKey = info.dayCode;
+  const dData = localStore[dKey] || { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
+
+  const btnTavuk = document.getElementById("btnTavuk");
+  const dayCard = document.getElementById("dayCard");
+
+  if (dData.tavuk) {
+    btnTavuk.classList.add("active-tavuk");
+    document.getElementById("iconTavuk").textContent = "🟢";
+    dayCard.classList.add("tavuk-active");
+  } else {
+    btnTavuk.classList.remove("active-tavuk");
+    document.getElementById("iconTavuk").textContent = "⚪";
+    dayCard.classList.remove("tavuk-active");
+  }
+
+  document.getElementById("inputWeight").value = dData.weight !== undefined ? dData.weight : "";
+  document.getElementById("inputCheat").value = dData.cheat !== undefined ? dData.cheat : "";
+  document.getElementById("inputNeck").value = dData.neck !== undefined ? dData.neck : "";
+  document.getElementById("inputWaist").value = dData.waist !== undefined ? dData.waist : "";
+  document.getElementById("inputArm").value = dData.arm !== undefined ? dData.arm : "";
+  document.getElementById("inputShoulder").value = dData.shoulder !== undefined ? dData.shoulder : "";
+
+  // Calculate & render Anthropometrics
+  const navyCard = document.getElementById("navyResultCard");
+  const navyActualVal = document.getElementById("navyActualVal");
+  const navyDiffText = document.getElementById("navyDiffText");
+  const vTaperStat = document.getElementById("vTaperStat");
+  const leanMassStat = document.getElementById("leanMassStat");
+
+  if (dData.neck && dData.waist && Number(dData.waist) > Number(dData.neck)) {
+    const wVal = dData.weight ? Number(dData.weight) : Number(info.targetWeight);
+    const shVal = dData.shoulder ? Number(dData.shoulder) : null;
+    const armVal = dData.arm ? Number(dData.arm) : null;
+
+    const res = calculateAnthropometrics(Number(dData.waist), Number(dData.neck), shVal, armVal, wVal, FIXED_HEIGHT);
+    
+    if (res !== null) {
+      navyCard.classList.add("active");
+      navyActualVal.textContent = `%${res.bf}`;
+      
+      const calculatedBF = Number(res.bf);
+      const targetBfNum = Number(info.bfPct);
+      const diff = calculatedBF - targetBfNum;
+      const absDiff = Math.abs(diff).toFixed(1);
+
+      if (diff <= -0.2) {
+        navyDiffText.innerHTML = `<span style="color: #34d399;">⚡ Hedefin %${absDiff} ÖNÜNDESİN! (Hedef: %${info.bfPct})</span>`;
+      } else if (diff >= 0.2) {
+        navyDiffText.innerHTML = `<span style="color: #f87171;">⚠️ Hedefin %${absDiff} GERİSİNDESİN (Hedef: %${info.bfPct})</span>`;
+      } else {
+        navyDiffText.innerHTML = `<span style="color: #60a5fa;">🎯 HEDEFE BİREBİR UYUMLUSUN! (Hedef: %${info.bfPct})</span>`;
+      }
+
+      vTaperStat.textContent = res.vTaper ? `V-Taper: ${res.vTaper} (İdeal: 1.61)` : `Kol: ${armVal || '-'} cm`;
+      leanMassStat.textContent = res.lbm ? `Yağsız Kütle: ${res.lbm} kg` : `Hedef Yağ: %${info.bfPct}`;
+    } else {
+      navyCard.classList.remove("active");
+    }
+  } else {
+    navyCard.classList.remove("active");
+  }
+
+  // Day debt text
+  const debtEl = document.getElementById("dayDebtText");
+  if (dData.cheat && Number(dData.cheat) > 0) {
+    const dayDebt = (Number(dData.cheat) / BASE_DEFICIT).toFixed(2);
+    debtEl.textContent = `+${dayDebt} Gün Borç (${dData.cheat} kcal / 1050)`;
+  } else {
+    debtEl.textContent = "";
+  }
+
+  renderGlobalStats();
+}
+
+function toggleDietAction() {
+  const info = calculateDay(currentDay);
+  const dKey = info.dayCode;
+  if (!localStore[dKey]) localStore[dKey] = { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
+
+  localStore[dKey].tavuk = !localStore[dKey].tavuk;
+  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+
+  renderUI();
+  showToast();
+  syncPushToSheets(dKey, localStore[dKey]);
+}
+
+function saveMeasurementInput() {
+  const info = calculateDay(currentDay);
+  const dKey = info.dayCode;
+  if (!localStore[dKey]) localStore[dKey] = { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
+
+  localStore[dKey].neck = document.getElementById("inputNeck").value;
+  localStore[dKey].waist = document.getElementById("inputWaist").value;
+  localStore[dKey].arm = document.getElementById("inputArm").value;
+  localStore[dKey].shoulder = document.getElementById("inputShoulder").value;
+
+  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+  renderUI();
+  showToast("Ölçüler Kaydedildi & Tabloya İletiliyor! 📐");
+  syncPushToSheets(dKey, localStore[dKey]);
+}
+
+function saveWeightInput() {
+  const val = document.getElementById("inputWeight").value;
+  const info = calculateDay(currentDay);
+  const dKey = info.dayCode;
+  if (!localStore[dKey]) localStore[dKey] = { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
+
+  localStore[dKey].weight = val;
+  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+  showToast();
+  syncPushToSheets(dKey, localStore[dKey]);
+}
+
+function saveCheatInput() {
+  const val = document.getElementById("inputCheat").value;
+  const info = calculateDay(currentDay);
+  const dKey = info.dayCode;
+  if (!localStore[dKey]) localStore[dKey] = { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
+
+  localStore[dKey].cheat = val;
+  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+  renderUI();
+  showToast();
+  syncPushToSheets(dKey, localStore[dKey]);
+}
+
+function renderGlobalStats() {
+  let tavukC = 0;
+  let totalCheat = 0;
+  let maxDay = 0;
+
+  for (let i = 1; i <= TOTAL_DAYS; i++) {
+    const code = `G${String(i).padStart(3, '0')}`;
+    const d = localStore[code];
+    if (d) {
+      if (d.tavuk) tavukC++;
+      if (d.cheat && Number(d.cheat) > 0) totalCheat += Number(d.cheat);
+      if (d.tavuk || d.weight || d.cheat || d.waist) maxDay = Math.max(maxDay, i);
+    }
+  }
+
+  const todayIdx = getTodayIndex();
+  const currentActive = Math.max(todayIdx, maxDay);
+
+  const totalPct = ((currentActive / TOTAL_DAYS) * 100).toFixed(1);
+  const dietPct = ((tavukC / TOTAL_DAYS) * 100).toFixed(1);
+  const totalDebtDays = (totalCheat / BASE_DEFICIT).toFixed(2);
+
+  document.getElementById("totalPct").textContent = `${totalPct}%`;
+  document.getElementById("progressBar").style.width = `${totalPct}%`;
+  document.getElementById("dayCounter").textContent = `${currentActive} / 260 Gün`;
+  document.getElementById("dietPct").textContent = `${dietPct}%`;
+  document.getElementById("totalCheatVal").textContent = `${totalCheat.toLocaleString('tr-TR')} kcal`;
+  document.getElementById("totalDebtVal").textContent = `${totalDebtDays} GÜN`;
+}
+
+function changeDay(offset) {
+  currentDay += offset;
+  if (currentDay < 1) currentDay = 1;
+  if (currentDay > TOTAL_DAYS) currentDay = TOTAL_DAYS;
+  renderUI();
+}
+
+function viewDay(dayNum) {
+  currentDay = dayNum;
+  renderUI();
+}
+
+function goToToday() {
+  currentDay = getTodayIndex();
+  renderUI();
+}
+
+function showToast(msg = "Kaydedildi & E-Tabloya Yazıldı! ⚡") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1400);
+}
+
+// 1. PULL DATA FROM GOOGLE SHEETS
+function pullDataFromSheets(showNotification = false) {
+  const badge = document.getElementById("liveBadge");
+  const statusTxt = document.getElementById("syncStatus");
+  badge.className = "live-badge syncing";
+  statusTxt.textContent = "VERİLER ÇEKİLİYOR...";
+
+  fetch(GAS_API_URL, {
+    method: "GET",
+    cache: "no-cache"
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res && res.status === "success" && res.data) {
+      for (const [dayCode, rowData] of Object.entries(res.data)) {
+        if (!localStore[dayCode]) localStore[dayCode] = {};
+        if (rowData.tavuk !== undefined) localStore[dayCode].tavuk = rowData.tavuk;
+        if (rowData.weight !== "") localStore[dayCode].weight = rowData.weight;
+        if (rowData.cheat !== "") localStore[dayCode].cheat = rowData.cheat;
+        if (rowData.waist !== "") localStore[dayCode].waist = rowData.waist;
+        if (rowData.arm !== "") localStore[dayCode].arm = rowData.arm;
+        if (rowData.neck !== "") localStore[dayCode].neck = rowData.neck;
+        if (rowData.shoulder !== "") localStore[dayCode].shoulder = rowData.shoulder;
+      }
+      localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+      renderUI();
+      badge.className = "live-badge";
+      statusTxt.textContent = "CANLI SENKRON ✅";
+      if (showNotification) showToast("Tablodaki tüm veriler çekildi! 📥");
+    } else {
+      badge.className = "live-badge";
+      statusTxt.textContent = "CANLI SENKRON ✅";
+    }
+  })
+  .catch(err => {
+    console.warn("Pull warning:", err);
+    badge.className = "live-badge error";
+    statusTxt.textContent = "LOKALDE KAYITLI";
+  });
+}
+
+// 2. PUSH DATA TO GOOGLE SHEETS
+function syncPushToSheets(dayCode, dayData) {
+  const badge = document.getElementById("liveBadge");
+  const statusTxt = document.getElementById("syncStatus");
+  badge.className = "live-badge syncing";
+  statusTxt.textContent = "YAZILIYOR...";
+
+  const params = new URLSearchParams({
+    action: "update",
+    day: dayCode,
+    actualWeight: dayData.weight !== undefined ? dayData.weight : "",
+    tavuk: dayData.tavuk ? "true" : "false",
+    cheat: dayData.cheat !== undefined ? dayData.cheat : "",
+    waist: dayData.waist !== undefined ? dayData.waist : "",
+    arm: dayData.arm !== undefined ? dayData.arm : "",
+    neck: dayData.neck !== undefined ? dayData.neck : "",
+    shoulder: dayData.shoulder !== undefined ? dayData.shoulder : ""
+  });
+
+  const fullUrl = GAS_API_URL + (GAS_API_URL.includes("?") ? "&" : "?") + params.toString();
+
+  fetch(fullUrl, {
+    method: "GET",
+    mode: "no-cors",
+    cache: "no-cache"
+  }).then(() => {
+    badge.className = "live-badge";
+    statusTxt.textContent = "CANLI SENKRON ✅";
+  }).catch(err => {
+    console.warn("Push warning:", err);
+    badge.className = "live-badge error";
+    statusTxt.textContent = "LOKALDE KAYITLI";
+  });
+}
+
+// Initial Run
+currentDay = getTodayIndex();
+renderUI();
+pullDataFromSheets(false);
+</script>
+
+</body>
+</html>
