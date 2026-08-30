@@ -3,103 +3,306 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PROTOKOL 260 — Canlı Takip & Vücut Ölçüm Paneli</title>
+<title>PROTOKOL 260</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #08090e;
-  --surface: #11141d;
-  --surface-border: #1d2433;
-  --surface-hover: #171c2a;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-sub: #f1f5f9;
+  --surface-sub-2: #e2e8f0;
+  --border: #e2e8f0;
+  --border-focus: #059669;
+  
+  --accent-green: #059669;
+  --accent-green-soft: #ecfdf5;
+  --accent-green-border: #a7f3d0;
+  
+  --accent-cyan: #0891b2;
+  --accent-cyan-soft: #ecfeff;
+  --accent-cyan-border: #a5f3fc;
+  
+  --accent-rose: #e11d48;
+  --accent-rose-soft: #fff1f2;
+  --accent-rose-border: #fecdd3;
+  
+  --accent-amber: #d97706;
+  --accent-amber-soft: #fffbeb;
+  --accent-amber-border: #fde68a;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 10px 30px -4px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+}
+
+body.dark-mode {
+  --bg: #090a0d;
+  --surface: #111318;
+  --surface-sub: #171a21;
+  --surface-sub-2: #1f232d;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-focus: #10b981;
+  
   --accent-green: #10b981;
-  --accent-green-glow: rgba(16, 185, 129, 0.22);
-  --accent-orange: #f59e0b;
-  --accent-red: #ef4444;
-  --accent-purple: #8b5cf6;
+  --accent-green-soft: rgba(16, 185, 129, 0.12);
+  --accent-green-border: rgba(16, 185, 129, 0.25);
+  
   --accent-cyan: #06b6d4;
-  --text-main: #f9fafb;
-  --text-muted: #9ca3af;
-  --text-dim: #6b7280;
-  --radius: 16px;
+  --accent-cyan-soft: rgba(6, 182, 212, 0.1);
+  --accent-cyan-border: rgba(6, 182, 212, 0.25);
+  
+  --accent-rose: #f43f5e;
+  --accent-rose-soft: rgba(244, 63, 94, 0.1);
+  --accent-rose-border: rgba(244, 63, 94, 0.25);
+  
+  --accent-amber: #f59e0b;
+  --accent-amber-soft: rgba(245, 158, 11, 0.1);
+  --accent-amber-border: rgba(245, 158, 11, 0.25);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-dim: #475569;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 6px 20px -3px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 35px -5px rgba(0, 0, 0, 0.6);
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Sayı kutularındaki yukarı/aşağı okları tamamen gizleme */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 body {
-  background-color: var(--bg);
-  color: var(--text-main);
+  background: var(--bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(5, 150, 105, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(8, 145, 178, 0.03) 0px, transparent 50%);
+  color: var(--text-primary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 12px 30px 12px;
+  padding: 14px 12px 40px 12px;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* =========================================
+   AÇILIŞ ANİMASYONU (SPLASH SCREEN)
+   ========================================= */
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  background-image: 
+    radial-gradient(circle at 50% 40%, rgba(5, 150, 105, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 50% 70%, rgba(8, 145, 178, 0.06) 0%, transparent 60%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.splash-overlay.fade-out {
+  opacity: 0;
+  transform: scale(1.03);
+  pointer-events: none;
+}
+
+.splash-content {
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.splash-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  background: var(--accent-green-soft);
+  border: 1px solid var(--accent-green-border);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  animation: splashBadgeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.splash-title {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.6px;
+  color: var(--text-primary);
+  animation: splashTitleIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.splash-line {
+  width: 40px;
+  height: 2px;
+  background: var(--accent-green);
+  border-radius: 999px;
+  animation: splashLineIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.splash-message {
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  animation: splashMsgIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+.splash-loader {
+  width: 140px;
+  height: 3px;
+  background: var(--surface-sub-2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+  animation: splashLoaderIn 0.8s ease 0.5s both;
+}
+
+.splash-loader-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #059669, #0891b2);
+  border-radius: 999px;
+  animation: splashLoadProgress 2.6s cubic-bezier(0.65, 0, 0.35, 1) 0.4s forwards;
+}
+
+@keyframes splashBadgeIn {
+  0% { opacity: 0; transform: translateY(-8px) scale(0.9); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes splashTitleIn {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes splashLineIn {
+  0% { width: 0; opacity: 0; }
+  100% { width: 40px; opacity: 1; }
+}
+@keyframes splashMsgIn {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes splashLoaderIn {
+  0% { opacity: 0; transform: scaleX(0.8); }
+  100% { opacity: 1; transform: scaleX(1); }
+}
+@keyframes splashLoadProgress {
+  0% { width: 0%; }
+  60% { width: 75%; }
+  100% { width: 100%; }
+}
+
+/* =========================================
+   ANA UYGULAMA ALANI & MİKRO-ANİMASYONLAR
+   ========================================= */
 .container {
   width: 100%;
-  max-width: 440px;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.container.app-ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ÜST NAVİGASYON */
 .top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2px 2px;
+  padding: 2px 4px;
 }
 .brand {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+}
+.brand-title {
+  font-size: 13.5px;
   font-weight: 900;
-  letter-spacing: 0.8px;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  text-transform: uppercase;
 }
 .live-badge {
-  background: var(--accent-green-glow);
-  color: var(--accent-green);
-  border: 1px solid var(--accent-green);
-  font-size: 9.5px;
-  font-weight: 800;
-  padding: 3px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 9px;
   border-radius: 999px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.3s ease;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.live-badge.synced {
+  background: var(--accent-green-soft);
+  border-color: var(--accent-green-border);
+  color: var(--accent-green);
 }
 .live-badge.syncing {
-  background: rgba(245, 158, 11, 0.2);
-  border-color: var(--accent-orange);
-  color: var(--accent-orange);
+  background: var(--accent-amber-soft);
+  border-color: var(--accent-amber-border);
+  color: var(--accent-amber);
 }
 .live-badge.error {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: var(--accent-red);
-  color: var(--accent-red);
+  background: var(--accent-rose-soft);
+  border-color: var(--accent-rose-border);
+  color: var(--accent-rose);
 }
 .sync-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   background: currentColor;
   border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.1); }
-  100% { opacity: 0.4; transform: scale(0.9); }
 }
 
 .top-actions {
@@ -108,110 +311,231 @@ body {
 }
 .icon-btn {
   background: var(--surface);
-  border: 1px solid var(--surface-border);
-  color: var(--text-muted);
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   text-decoration: none;
-  font-size: 14px;
-  transition: all 0.2s;
+  font-size: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .icon-btn:hover {
-  background: var(--surface-hover);
-  color: var(--text-main);
-  border-color: #2b3548;
+  background: var(--surface-sub);
+  color: var(--text-primary);
+  border-color: var(--text-dim);
+  transform: translateY(-1px);
+}
+.icon-btn:active {
+  transform: scale(0.94);
 }
 
-.progress-card {
+/* STÜDYO BEYAZI / KOYU TEMA KARTLAR */
+.card {
   background: var(--surface);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius);
-  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  box-shadow: var(--shadow-md);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
-.progress-header {
+
+/* DASHBOARD PANELİ */
+.dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
-.p-label {
-  font-size: 10px;
+.marathon-title {
+  font-size: 9.5px;
   font-weight: 800;
   text-transform: uppercase;
-  color: var(--text-dim);
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
 }
-.p-pct {
-  font-size: 21px;
+.marathon-days {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}
+.marathon-pct {
+  font-size: 24px;
   font-weight: 900;
-  color: var(--accent-green);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  letter-spacing: -0.5px;
 }
-.bar-track {
+
+.timeline-track {
   width: 100%;
-  height: 6px;
-  background: #181e2b;
+  height: 5px;
+  background: var(--surface-sub);
   border-radius: 999px;
   overflow: hidden;
 }
-.bar-fill {
+.timeline-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #10b981, #34d399);
+  background: linear-gradient(90deg, #059669, #0891b2);
   border-radius: 999px;
   transition: width 0.4s ease;
 }
-.stats-row {
+
+/* 4'LÜ ÖZET KUTULARI */
+.stats-grid-4 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
-.stat-pill {
-  background: #0d1017;
-  border: 1px solid #1a2130;
-  padding: 6px 8px;
-  border-radius: 9px;
+.stat-box {
+  background: var(--surface-sub);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 9px 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
   text-align: center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.stat-pill.debt-pill {
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.08);
+.stat-box:hover {
+  transform: translateY(-2px);
 }
-.s-label {
-  font-size: 9px;
-  color: var(--text-dim);
-  font-weight: 700;
+body.dark-mode .stat-box {
+  border-color: rgba(255, 255, 255, 0.04);
 }
-.s-val {
-  font-size: 12px;
+.stat-box-lbl {
+  font-size: 8px;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
-.s-val.debt-val {
-  color: #f87171;
+.stat-box-val {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
 }
 
+/* FAZ YOL HARİTASI */
+.roadmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.roadmap-title {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+}
+.current-phase-pill {
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  background: var(--surface-sub);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.phase-segmented-bar {
+  display: grid;
+  grid-template-columns: 2fr 10fr 4fr 59fr 35fr 150fr;
+  gap: 3px;
+  height: 5px;
+  width: 100%;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface-sub);
+}
+.phase-segment {
+  height: 100%;
+  background: var(--surface-sub-2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.phase-segment.passed { background: var(--text-dim); }
+.phase-segment.active { background: var(--accent-green); box-shadow: 0 0 8px rgba(5, 150, 105, 0.4); }
+
+.phase-stepper {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.phase-stepper::-webkit-scrollbar { display: none; }
+.phase-step-btn {
+  flex: 0 0 auto;
+  background: var(--surface-sub);
+  border: 1px solid var(--border);
+  padding: 6px 9px;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.phase-step-btn:hover {
+  background: var(--surface-sub-2);
+  transform: translateY(-2px);
+}
+.phase-step-btn:active {
+  transform: scale(0.96);
+}
+.phase-step-btn.current {
+  border-color: var(--accent-green-border);
+  background: var(--accent-green-soft);
+}
+.phase-step-btn.current .ps-name { color: var(--accent-green); }
+.ps-tag {
+  font-size: 7.5px;
+  font-weight: 800;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.ps-name {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* GÜNÜN KARTI */
 .day-card {
-  background: linear-gradient(180deg, #161b26 0%, #11141d 100%);
-  border: 1.5px solid #232b3d;
-  border-radius: var(--radius);
-  padding: 15px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 13px;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .day-card.tavuk-active {
-  border-color: #10b981;
-  background: linear-gradient(180deg, #0e241c 0%, #0a1713 100%);
-  box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.25);
+  border-color: var(--accent-green-border);
+  background: linear-gradient(180deg, var(--accent-green-soft) 0%, var(--surface) 100%);
+  box-shadow: 0 8px 24px -4px rgba(5, 150, 105, 0.12);
 }
 
 .day-header {
@@ -220,28 +544,34 @@ body {
   align-items: center;
 }
 .nav-arrow {
-  background: #1c2230;
-  border: 1px solid #2a3449;
-  color: var(--text-main);
+  background: var(--surface-sub);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
   width: 32px;
   height: 32px;
-  border-radius: 9px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 800;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nav-arrow:hover {
-  background: #252e42;
+  background: var(--surface-sub-2);
+  color: var(--text-primary);
+  transform: scale(1.08);
+}
+.nav-arrow:active {
+  transform: scale(0.92);
 }
 .day-center {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
 }
 .day-code-wrap {
   display: flex;
@@ -253,117 +583,152 @@ body {
   font-size: 19px;
   font-weight: 900;
   letter-spacing: 0.5px;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
 }
 .phase-badge {
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
   text-transform: uppercase;
-  background: #1e3a8a;
-  color: #bfdbfe;
+  font-family: var(--font-mono);
+  background: var(--surface-sub);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
 }
 .day-date-str {
   font-size: 11px;
   color: var(--text-muted);
   font-weight: 600;
 }
-
 .daily-bf-pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #fca5a5;
-  font-size: 10px;
+  background: var(--accent-rose-soft);
+  border: 1px solid var(--accent-rose-border);
+  color: var(--accent-rose);
+  font-size: 9.5px;
   font-weight: 800;
   padding: 2px 8px;
   border-radius: 6px;
-  margin-top: 2px;
   letter-spacing: 0.3px;
+  font-family: var(--font-mono);
 }
-
 .today-back-btn {
-  background: var(--accent-green);
-  color: #000;
+  background: var(--text-primary);
+  color: var(--bg);
   border: none;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 5px;
+  padding: 2px 7px;
+  border-radius: 4px;
   cursor: pointer;
-  margin-top: 3px;
+  margin-top: 2px;
+  transition: transform 0.15s ease;
+}
+.today-back-btn:active {
+  transform: scale(0.95);
 }
 
-.info-strip {
-  background: #0c0f16;
-  border: 1px solid #1b2230;
-  border-radius: 12px;
+/* DUAL TARGET METRİK ALANI */
+.target-dual-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.target-box-sub {
+  background: var(--surface-sub);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 9px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: transform 0.2s ease;
+}
+.target-box-sub:hover {
+  transform: translateY(-1px);
+}
+.target-box-lbl {
+  font-size: 8px;
+  color: var(--text-muted);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.target-box-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+/* DİYET BİLGİ ŞERİDİ */
+.diet-info-strip {
+  background: var(--surface-sub);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   padding: 10px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.day-card.tavuk-active .info-strip {
-  background: #091712;
-  border-color: #164333;
-}
-.target-kilo-val {
-  font-size: 19px;
-  font-weight: 900;
-  color: var(--accent-green);
-}
-.target-kilo-lbl {
-  font-size: 9px;
-  color: var(--text-dim);
-  font-weight: 700;
-  text-transform: uppercase;
-}
 .diet-tag-val {
   font-size: 11px;
   font-weight: 800;
-  color: var(--text-main);
-  text-align: right;
+  color: var(--text-primary);
 }
 .deficit-tag-val {
   font-size: 9.5px;
-  color: var(--accent-orange);
+  color: var(--accent-amber);
   font-weight: 700;
-  text-align: right;
-  margin-top: 2px;
+  font-family: var(--font-mono);
 }
 
+/* DİYET UYUM TOGGLE BUTONU */
 .single-action-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   padding: 13px 10px;
-  background: #0e111a;
-  border: 1.5px solid #202636;
-  border-radius: 13px;
-  color: var(--text-muted);
-  font-size: 13.5px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 12.5px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   user-select: none;
+  box-shadow: var(--shadow-sm);
+}
+.single-action-btn:hover {
+  border-color: var(--text-dim);
+  background: var(--surface-sub);
+  transform: translateY(-1px);
+}
+.single-action-btn:active {
+  transform: scale(0.97);
 }
 .single-action-btn.active-tavuk {
-  background: rgba(16, 185, 129, 0.22);
-  border-color: #10b981;
-  color: #34d399;
+  background: var(--accent-green-soft);
+  border-color: var(--accent-green-border);
+  color: var(--accent-green);
 }
 
+/* ÖLÇÜLER KUTUSU (2x2 GRID - TAŞMASIZ) */
 .measurements-box {
-  background: #0b0e15;
-  border: 1px solid #1e2637;
-  border-radius: 14px;
-  padding: 12px;
+  background: var(--surface-sub);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 11px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  width: 100%;
 }
 .box-header {
   display: flex;
@@ -371,65 +736,84 @@ body {
   align-items: center;
 }
 .box-title {
-  font-size: 10.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: var(--accent-cyan);
-  letter-spacing: 0.5px;
-}
-.profile-tag {
   font-size: 9.5px;
   font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.6px;
+}
+.profile-tag {
+  font-size: 8.5px;
+  font-weight: 800;
   color: var(--accent-cyan);
-  background: rgba(6, 182, 212, 0.1);
+  background: var(--accent-cyan-soft);
   padding: 2px 7px;
   border-radius: 5px;
-  border: 1px solid rgba(6, 182, 212, 0.25);
+  border: 1px solid var(--accent-cyan-border);
+  font-family: var(--font-mono);
 }
 
 .measurements-grid-2x2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 6px;
+  width: 100%;
 }
 .m-input-wrap {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+  min-width: 0;
 }
 .m-input-lbl {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--text-dim);
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--text-muted);
   text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 .m-input {
-  background: #11151f;
-  border: 1px solid #232d40;
-  border-radius: 8px;
-  color: var(--text-main);
-  padding: 8px 10px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 7px 6px;
   font-size: 12.5px;
   font-weight: 700;
+  font-family: var(--font-mono);
   outline: none;
   text-align: center;
-  transition: border-color 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.m-input::placeholder {
+  color: var(--text-dim);
+  letter-spacing: 1px;
 }
 .m-input:focus {
   border-color: var(--accent-cyan);
+  background: var(--surface);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(8, 145, 178, 0.12);
 }
 
+/* NAVY YAĞ ORANI SONUÇ KARTI */
 .navy-result-card {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(16, 185, 129, 0.12) 100%);
-  border: 1px solid rgba(6, 182, 212, 0.35);
-  border-radius: 10px;
-  padding: 10px 12px;
+  background: var(--accent-cyan-soft);
+  border: 1px solid var(--accent-cyan-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
   display: none;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
+  animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .navy-result-card.active {
   display: flex;
+}
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .navy-main-row {
   display: flex;
@@ -437,197 +821,253 @@ body {
   align-items: center;
 }
 .navy-val-title {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
   color: var(--accent-cyan);
   text-transform: uppercase;
 }
 .navy-actual-val {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 900;
-  color: #fff;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
 }
 .navy-sub-stats {
   display: flex;
   justify-content: space-between;
-  font-size: 9.5px;
-  color: var(--text-dim);
+  font-size: 8.5px;
+  color: var(--text-secondary);
   font-weight: 700;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: var(--font-mono);
+  border-top: 1px solid rgba(8, 145, 178, 0.15);
   padding-top: 4px;
   margin-top: 2px;
 }
 .navy-diff-text {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
 }
 
+/* TARTI KİLOSU & KAÇAMAK GİRİŞLERİ */
 .inputs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 6px;
+  width: 100%;
 }
 .field-wrap {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+  min-width: 0;
 }
 .field-lbl {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--text-dim);
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--text-muted);
   text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 .num-input {
-  background: #0b0e14;
-  border: 1px solid #1d2536;
-  border-radius: 10px;
-  color: var(--text-main);
-  padding: 9px 10px;
-  font-size: 13px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 8px 6px;
+  font-size: 12.5px;
   font-weight: 700;
+  font-family: var(--font-mono);
   outline: none;
-  transition: border-color 0.2s;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.num-input::placeholder {
+  color: var(--text-dim);
+  letter-spacing: 1px;
 }
 .num-input:focus {
   border-color: var(--accent-green);
+  background: var(--surface);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.12);
 }
 .day-debt-indicator {
-  font-size: 9.5px;
-  color: #f87171;
+  font-size: 8.5px;
+  color: var(--accent-rose);
   font-weight: 700;
-  margin-top: 2px;
+  margin-top: 1px;
+  font-family: var(--font-mono);
 }
 
-.jumper-card {
-  background: var(--surface);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius);
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.jumper-title {
-  font-size: 9.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.jumper-scroll {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-  scrollbar-width: none;
-}
-.jumper-scroll::-webkit-scrollbar { display: none; }
-.j-pill {
-  flex: 0 0 auto;
-  background: #0d1017;
-  border: 1px solid #1c2333;
-  padding: 5px 9px;
-  border-radius: 8px;
-  font-size: 10.5px;
-  font-weight: 700;
-  color: var(--text-muted);
-  cursor: pointer;
-}
-.j-pill:hover {
-  background: #182030;
-  color: var(--text-main);
-}
-
+/* ALT İŞLEM BUTONLARI */
 .bottom-btns-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 6px;
 }
 .action-link-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: #131722;
-  border: 1.5px solid #222a3d;
-  color: var(--text-main);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
   padding: 11px 8px;
-  border-radius: 12px;
-  font-size: 11.5px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
   font-weight: 800;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .action-link-btn:hover {
-  background: #1b2130;
-  border-color: #3b82f6;
-  color: #60a5fa;
+  background: var(--surface-sub);
+  color: var(--text-primary);
+  border-color: var(--text-dim);
+  transform: translateY(-1px);
+}
+.action-link-btn:active {
+  transform: scale(0.97);
 }
 
+/* BİLDİRİM TOAST */
 .toast {
   position: fixed;
-  bottom: 20px;
-  background: var(--accent-green);
-  color: #000;
+  bottom: 24px;
+  background: var(--text-primary);
+  color: var(--bg);
   font-size: 11px;
   font-weight: 800;
   padding: 7px 16px;
   border-radius: 999px;
   opacity: 0;
-  transform: translateY(15px);
-  transition: all 0.25s ease;
+  transform: translateY(10px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
   z-index: 100;
+  box-shadow: var(--shadow-lg);
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="container">
+<!-- SPLASH SCREEN OVERLAY (3 SANİYELİK AÇILIŞ) -->
+<div class="splash-overlay" id="splashScreen">
+  <div class="splash-content">
+    <div class="splash-badge">PROTOKOL 260</div>
+    <h1 class="splash-title">Hoş Geldin Cem</h1>
+    <div class="splash-line"></div>
+    <p class="splash-message">
+      Hayal ettiğin hayatı yaşamak için yapman gerekenleri hatırladığın için teşekkür ederim.
+    </p>
+    <div class="splash-loader">
+      <div class="splash-loader-bar"></div>
+    </div>
+  </div>
+</div>
 
+<div class="container" id="appContainer">
+
+  <!-- ÜST MENÜ -->
   <div class="top-nav">
     <div class="brand">
-      <span>⚔️ PROTOKOL</span>
+      <span class="brand-title">PROTOKOL 260</span>
       <div class="live-badge" id="liveBadge" onclick="pullDataFromSheets(true)" title="Tablodan Verileri Yenile">
         <div class="sync-dot"></div>
-        <span id="syncStatus">BAĞLANILIYOR...</span>
+        <span id="syncStatus">BAĞLANIYOR...</span>
       </div>
     </div>
     <div class="top-actions">
+      <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Temayı Değiştir">🌙</button>
       <button class="icon-btn" onclick="pullDataFromSheets(true)" title="Tablodan Verileri Çek">🔄</button>
       <a href="https://docs.google.com/spreadsheets/d/1plcDnihtTA7X0Y1KiOKo1MKZKkbxqH1Xj5zSdNFMFnU/edit?gid=1985801109#gid=1985801109" target="_blank" class="icon-btn" title="Google E-Tabloyu Aç">📊</a>
     </div>
   </div>
 
-  <div class="progress-card">
-    <div class="progress-header">
+  <!-- GENEL DASHBOARD & METRİKLER -->
+  <div class="card">
+    <div class="dashboard-header">
       <div>
-        <div class="p-label">260 Günlük Maraton</div>
-        <div style="font-size: 10.5px; color: var(--text-dim); font-weight: 700;" id="dayCounter">0 / 260 Gün</div>
+        <div class="marathon-title">Toplam İlerleme</div>
+        <div class="marathon-days" id="dayCounter">0 / 260 Gün</div>
       </div>
-      <div class="p-pct" id="totalPct">0.0%</div>
+      <div class="marathon-pct" id="totalPct">0.0%</div>
     </div>
-    <div class="bar-track">
-      <div class="bar-fill" id="progressBar"></div>
+    
+    <div class="timeline-track">
+      <div class="timeline-fill" id="progressBar"></div>
     </div>
-    <div class="stats-row">
-      <div class="stat-pill">
-        <div class="s-label">🍗 Diyet Uyumu</div>
-        <div class="s-val" id="dietPct">0%</div>
+
+    <!-- 4'LÜ ÖZET KUTULARI -->
+    <div class="stats-grid-4">
+      <div class="stat-box">
+        <div class="stat-box-lbl">Diyet</div>
+        <div class="stat-box-val" id="dietPct">0%</div>
       </div>
-      <div class="stat-pill">
-        <div class="s-label">🔥 Toplam Kaçamak</div>
-        <div class="s-val" id="totalCheatVal">0 kcal</div>
+      <div class="stat-box">
+        <div class="stat-box-lbl" style="color: var(--accent-cyan);">Hedefe Kalan</div>
+        <div class="stat-box-val" style="color: var(--accent-cyan);" id="targetDistanceVal">-- kg</div>
       </div>
-      <div class="stat-pill debt-pill">
-        <div class="s-label" style="color: #f87171;">🚨 Borç Gün</div>
-        <div class="s-val debt-val" id="totalDebtVal">0.00 GÜN</div>
+      <div class="stat-box">
+        <div class="stat-box-lbl" style="color: var(--accent-rose);">Borç</div>
+        <div class="stat-box-val" style="color: var(--accent-rose);" id="totalDebtVal">0.0 GÜN</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-lbl">Kaçamak</div>
+        <div class="stat-box-val" id="totalCheatVal">0 kcal</div>
       </div>
     </div>
   </div>
 
+  <!-- FAZ YOL HARİTASI KARTI -->
+  <div class="card">
+    <div class="roadmap-header">
+      <div class="roadmap-title">Yol Haritası</div>
+      <div class="current-phase-pill" id="roadmapPhaseBadge">FAZ 1</div>
+    </div>
+
+    <div class="phase-segmented-bar">
+      <div class="phase-segment" id="seg1" onclick="viewDay(1)" title="Faz 1: Su Orucu (G01-G02)"></div>
+      <div class="phase-segment" id="seg2" onclick="viewDay(3)" title="Faz 2: 0 Karb Cut (G03-G12)"></div>
+      <div class="phase-segment" id="seg3" onclick="viewDay(13)" title="Faz 3: Flush Kardiyo (G13-G16)"></div>
+      <div class="phase-segment" id="seg4" onclick="viewDay(17)" title="Faz 4: %12 İnişi (G17-G75)"></div>
+      <div class="phase-segment" id="seg5" onclick="viewDay(76)" title="Faz 5: Reverse (G76-G110)"></div>
+      <div class="phase-segment" id="seg6" onclick="viewDay(111)" title="Faz 6: Clean Bulk (G111-G260)"></div>
+    </div>
+
+    <div class="phase-stepper">
+      <div class="phase-step-btn" id="pstep1" onclick="viewDay(1)">
+        <span class="ps-tag">G01-G02</span>
+        <span class="ps-name">1. Su Orucu</span>
+      </div>
+      <div class="phase-step-btn" id="pstep2" onclick="viewDay(3)">
+        <span class="ps-tag">G03-G12</span>
+        <span class="ps-name">2. 0 Karb</span>
+      </div>
+      <div class="phase-step-btn" id="pstep3" onclick="viewDay(13)">
+        <span class="ps-tag">G13-G16</span>
+        <span class="ps-name">3. Flush</span>
+      </div>
+      <div class="phase-step-btn" id="pstep4" onclick="viewDay(17)">
+        <span class="ps-tag">G17-G75</span>
+        <span class="ps-name">4. %12 Cut</span>
+      </div>
+      <div class="phase-step-btn" id="pstep5" onclick="viewDay(76)">
+        <span class="ps-tag">G76-G110</span>
+        <span class="ps-name">5. Reverse</span>
+      </div>
+      <div class="phase-step-btn" id="pstep6" onclick="viewDay(111)">
+        <span class="ps-tag">G111-G260</span>
+        <span class="ps-name">6. Clean Bulk</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GÜNÜN DETAY & GİRİŞ KARTI -->
   <div class="day-card" id="dayCard">
     <div class="day-header">
       <button class="nav-arrow" onclick="changeDay(-1)">‹</button>
@@ -637,118 +1077,151 @@ body {
           <span class="phase-badge" id="phaseBadge">FAZ 1</span>
         </div>
         <div class="day-date-str" id="dayDateStr">29 Ağustos 2026 (Cumartesi)</div>
-        <div class="daily-bf-pill" id="dailyBfPill">🔥 Hedef Yağ: %23.0</div>
+        <div class="daily-bf-pill" id="dailyBfPill">Hedef Yağ: %23.0</div>
         <button class="today-back-btn" id="todayBackBtn" onclick="goToToday()" style="display:none;">BUGÜNE DÖN</button>
       </div>
       <button class="nav-arrow" onclick="changeDay(1)">›</button>
     </div>
 
-    <div class="info-strip">
-      <div>
-        <div class="target-kilo-lbl">Hedef Kilo</div>
-        <div class="target-kilo-val" id="targetKilo">102.00 kg</div>
+    <!-- HEDEF VE SAPMA BİLGİSİ -->
+    <div class="target-dual-strip">
+      <div class="target-box-sub">
+        <span class="target-box-lbl">Günün Hedef Kilosu</span>
+        <span class="target-box-val" id="targetKilo">102.00 kg</span>
       </div>
-      <div>
-        <div class="diet-tag-val" id="dietTag">0 kcal (Su Orucu)</div>
-        <div class="deficit-tag-val" id="deficitTag">-2.350 kcal Açık</div>
+      <div class="target-box-sub">
+        <span class="target-box-lbl">Günlük Hedefe Uzaklık</span>
+        <span class="target-box-val" id="dailyTargetDiffVal" style="color: var(--accent-green);">-- kg</span>
       </div>
     </div>
 
+    <!-- GÜNLÜK PROTOKOL BİLGİSİ -->
+    <div class="diet-info-strip">
+      <div class="diet-tag-val" id="dietTag">0 kcal (Su Orucu)</div>
+      <div class="deficit-tag-val" id="deficitTag">-2.350 kcal Açık</div>
+    </div>
+
+    <!-- DİYET EKSİKSİZ UYULDU BUTONU -->
     <button class="single-action-btn" id="btnTavuk" onclick="toggleDietAction()">
       <span id="iconTavuk">⚪</span>
-      <span>🍗 DİYETE EKSİKSİZ UYULDU</span>
+      <span>DİYETE EKSİKSİZ UYULDU</span>
     </button>
 
+    <!-- VÜCUT ÖLÇÜLERİ VE YAĞ ORANI HESABI -->
     <div class="measurements-box">
       <div class="box-header">
-        <div class="box-title">📐 Vücut Ölçüleri & Navy Yağ Oranı</div>
+        <div class="box-title">Vücut Ölçüleri & Navy Yağ Oranı</div>
         <div class="profile-tag" id="profileTag">194 cm | 22 Yaş</div>
       </div>
       
       <div class="measurements-grid-2x2">
         <div class="m-input-wrap">
           <label class="m-input-lbl">Boyun (cm)</label>
-          <input type="number" step="0.5" class="m-input" id="inputNeck" placeholder="Örn: 40" onchange="saveMeasurementInput()">
+          <input type="number" step="0.5" class="m-input" id="inputNeck" placeholder="..." onchange="saveMeasurementInput()">
         </div>
         <div class="m-input-wrap">
           <label class="m-input-lbl">Bel (cm)</label>
-          <input type="number" step="0.5" class="m-input" id="inputWaist" placeholder="Örn: 95" onchange="saveMeasurementInput()">
+          <input type="number" step="0.5" class="m-input" id="inputWaist" placeholder="..." onchange="saveMeasurementInput()">
         </div>
         <div class="m-input-wrap">
           <label class="m-input-lbl">Kol (cm)</label>
-          <input type="number" step="0.5" class="m-input" id="inputArm" placeholder="Örn: 41" onchange="saveMeasurementInput()">
+          <input type="number" step="0.5" class="m-input" id="inputArm" placeholder="..." onchange="saveMeasurementInput()">
         </div>
         <div class="m-input-wrap">
           <label class="m-input-lbl">Omuz (cm)</label>
-          <input type="number" step="0.5" class="m-input" id="inputShoulder" placeholder="Örn: 130" onchange="saveMeasurementInput()">
+          <input type="number" step="0.5" class="m-input" id="inputShoulder" placeholder="..." onchange="saveMeasurementInput()">
         </div>
       </div>
 
       <div class="navy-result-card" id="navyResultCard">
         <div class="navy-main-row">
-          <span class="navy-val-title">Ölçülen Gerçek Yağ:</span>
+          <span class="navy-val-title">Ölçülen Yağ:</span>
           <span class="navy-actual-val" id="navyActualVal">%0.0</span>
         </div>
-        <div class="navy-diff-text" id="navyDiffText">Hedef ile durum...</div>
+        <div class="navy-diff-text" id="navyDiffText">Hedef durumu...</div>
         <div class="navy-sub-stats" id="navySubStats">
-          <span id="vTaperStat">V-Taper (Omuz/Bel): -</span>
-          <span id="leanMassStat">Tahmini Yağsız Kütle: -</span>
+          <span id="vTaperStat">V-Taper: -</span>
+          <span id="leanMassStat">Yağsız: -</span>
         </div>
       </div>
     </div>
 
+    <!-- TARTI KİLOSU & KAÇAMAK -->
     <div class="inputs-grid">
       <div class="field-wrap">
         <label class="field-lbl">Tartı Kilon (kg)</label>
-        <input type="number" step="0.1" class="num-input" id="inputWeight" placeholder="Örn: 101.4" onchange="saveWeightInput()">
+        <input type="number" step="0.1" class="num-input" id="inputWeight" placeholder="..." onchange="saveWeightInput()">
       </div>
       <div class="field-wrap">
         <label class="field-lbl">Bozdun Mu? (+kcal)</label>
-        <input type="number" step="50" class="num-input" id="inputCheat" placeholder="Örn: 500" onchange="saveCheatInput()">
+        <input type="number" step="50" class="num-input" id="inputCheat" placeholder="..." onchange="saveCheatInput()">
         <div class="day-debt-indicator" id="dayDebtText"></div>
       </div>
     </div>
   </div>
 
-  <div class="jumper-card">
-    <div class="jumper-title">🎯 Faz Kısayolları</div>
-    <div class="jumper-scroll">
-      <div class="j-pill" onclick="viewDay(1)">Faz 1: Su Orucu (G01)</div>
-      <div class="j-pill" onclick="viewDay(3)">Faz 2: 0 Karb (G03)</div>
-      <div class="j-pill" onclick="viewDay(13)">Faz 3: Flush Kardiyo (G13)</div>
-      <div class="j-pill" onclick="viewDay(17)">Faz 4: 150g Pirinç (G17)</div>
-      <div class="j-pill" onclick="viewDay(75)">🏆 %12 Yağ (G75)</div>
-      <div class="j-pill" onclick="viewDay(76)">Faz 5: Reverse (G76)</div>
-      <div class="j-pill" onclick="viewDay(111)">Faz 6: Clean Bulk (G111)</div>
-      <div class="j-pill" onclick="viewDay(260)">👑 260. Gün Final</div>
-    </div>
-  </div>
-
+  <!-- ALT BAĞLANTI BUTONLARI -->
   <div class="bottom-btns-row">
     <button class="action-link-btn" onclick="pullDataFromSheets(true)">
       <span>🔄</span>
-      <span>Tablodan Veri Çek</span>
+      <span>Yenile</span>
     </button>
     <a href="https://docs.google.com/spreadsheets/d/1plcDnihtTA7X0Y1KiOKo1MKZKkbxqH1Xj5zSdNFMFnU/edit?gid=1985801109#gid=1985801109" target="_blank" class="action-link-btn">
       <span>📊</span>
-      <span>Google E-Tablo</span>
+      <span>E-Tablo</span>
     </a>
   </div>
 
 </div>
 
-<div class="toast" id="toast">Kaydedildi! ⚡</div>
+<div class="toast" id="toast">Kaydedildi!</div>
 
 <script>
-const START_DATE = new Date(2026, 7, 29);
+const START_DATE = new Date(2026, 7, 29); // 29 Ağustos 2026
 const TOTAL_DAYS = 260;
-const FIXED_HEIGHT = 194.0;
-const BIRTHDAY = new Date(2004, 1, 14);
+const FIXED_HEIGHT = 194.0; // cm
+const BIRTHDAY = new Date(2004, 1, 14); // 14 Şubat 2004
+const CUT_TARGET_WEIGHT = 89.14; // %12 BF hedef kilosu
 const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxQttyLeh1Xv764O131HXost32VBDQEJU0wV1aJ9M6guwh8fxg09AQHN2l7Y_LS7e4I/exec";
-const BASE_DEFICIT = 1050;
+const BASE_DEFICIT = 1050; // Günlük baz açık
 
 let currentDay = 1;
-let localStore = JSON.parse(localStorage.getItem("protokol_260_master_final_store") || "{}");
+let localStore = JSON.parse(localStorage.getItem("protokol_260_studio_store") || "{}");
+
+// Tema Yönetimi (Varsayılan Açılış: Beyaz / Light Mod)
+function initTheme() {
+  const savedTheme = localStorage.getItem("protokol_theme");
+  const isDark = savedTheme === "dark";
+  
+  if (isDark) {
+    document.body.classList.add("dark-mode");
+    document.getElementById("themeToggleBtn").textContent = "☀️";
+  } else {
+    document.body.classList.remove("dark-mode");
+    document.getElementById("themeToggleBtn").textContent = "🌙";
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
+  document.getElementById("themeToggleBtn").textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("protokol_theme", isDark ? "dark" : "light");
+}
+
+// Açılış Karşılama Ekranı (3 Saniye)
+window.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  setTimeout(() => {
+    const splash = document.getElementById('splashScreen');
+    const app = document.getElementById('appContainer');
+    if (splash) splash.classList.add('fade-out');
+    if (app) app.classList.add('app-ready');
+    setTimeout(() => {
+      if (splash) splash.style.display = 'none';
+    }, 800);
+  }, 3000);
+});
 
 function getDynamicAge(targetDate) {
   let age = targetDate.getFullYear() - BIRTHDAY.getFullYear();
@@ -766,8 +1239,7 @@ function calculateDay(dayNum) {
   const currentAge = getDynamicAge(d);
   
   let phase = "FAZ 1";
-  let phaseBg = "#6B7280";
-  let phaseColor = "#F3F4F6";
+  let phaseNum = 1;
   let targetWeight = 102.0;
   let diet = "0 kcal (Su Orucu / Elektrolit)";
   let deficit = "-2.350 kcal Açık";
@@ -775,32 +1247,28 @@ function calculateDay(dayNum) {
   
   if (dayNum <= 2) {
     phase = "FAZ 1: SU ORUCU";
-    phaseBg = "#6B7280";
-    phaseColor = "#F3F4F6";
+    phaseNum = 1;
     targetWeight = 102.0 - ((dayNum - 1) * 0.40);
     diet = "0 kcal (Su Orucu / Elektrolit)";
     deficit = "-2.350 kcal Açık";
     bfPct = 23.0 - ((dayNum - 1) * 0.30);
   } else if (dayNum <= 12) {
     phase = "FAZ 2: 0 KARB CUT";
-    phaseBg = "#1E3A8A";
-    phaseColor = "#BFDBFE";
+    phaseNum = 2;
     targetWeight = 101.2 - ((dayNum - 3) * 0.19);
     diet = "1.250 kcal (1kg Tavuk / 0 Karb)";
     deficit = "-1.500 kcal Açık";
     bfPct = 22.4 - ((dayNum - 3) * 0.19);
   } else if (dayNum <= 16) {
     phase = "FAZ 3: FLUSH KARDİYO";
-    phaseBg = "#991B1B";
-    phaseColor = "#FECACA";
+    phaseNum = 3;
     targetWeight = 99.2 - ((dayNum - 13) * 0.55);
     diet = "0 kcal (Su Orucu + 2000kcal Kardiyo)";
     deficit = "-4.350 kcal Açık";
     bfPct = 20.5 - ((dayNum - 13) * 0.35);
   } else if (dayNum <= 75) {
     phase = "FAZ 4: %12 İNİŞİ";
-    phaseBg = "#065F46";
-    phaseColor = "#A7F3D0";
+    phaseNum = 4;
     const prog = (dayNum - 17) / 58;
     targetWeight = 97.0 - (prog * (97.0 - 89.14));
     diet = "1.700 kcal (1kg Tavuk + 150g Pirinç)";
@@ -809,8 +1277,7 @@ function calculateDay(dayNum) {
   } else if (dayNum <= 110) {
     const revW = Math.floor((dayNum - 76) / 7) + 1;
     phase = `FAZ 5: REV (H${revW})`;
-    phaseBg = "#92400E";
-    phaseColor = "#FDE68A";
+    phaseNum = 5;
     const carbs = 150 + (revW * 50);
     const cals = 1700 + (revW * 200);
     const prog5 = (dayNum - 75) / 35;
@@ -820,8 +1287,7 @@ function calculateDay(dayNum) {
     bfPct = 12.0 - (prog5 * (12.0 - 9.9));
   } else {
     phase = "FAZ 6: CLEAN BULK";
-    phaseBg = "#4C1D95";
-    phaseColor = "#DDD6FE";
+    phaseNum = 6;
     const p = (dayNum - 110) / 150;
     targetWeight = 87.14 + (p * (93.37 - 87.14));
     diet = "2.900 kcal (+150 kcal Surplus / 450g Pirinç)";
@@ -834,10 +1300,9 @@ function calculateDay(dayNum) {
     dayCode: `G${String(dayNum).padStart(3, '0')}`,
     dateStr,
     currentAge,
+    phaseNum,
     bfPct: bfPct.toFixed(1),
     phase,
-    phaseBg,
-    phaseColor,
     targetWeight: targetWeight.toFixed(2),
     diet,
     deficit
@@ -887,15 +1352,28 @@ function renderUI() {
   document.getElementById("dayCode").textContent = info.dayCode;
   document.getElementById("dayDateStr").textContent = info.dateStr;
   document.getElementById("profileTag").textContent = `194 cm | ${info.currentAge} Yaş`;
-  document.getElementById("dailyBfPill").textContent = `🔥 Hedef Yağ: %${info.bfPct}`;
+  document.getElementById("dailyBfPill").textContent = `Hedef Yağ: %${info.bfPct}`;
   document.getElementById("targetKilo").textContent = `${info.targetWeight} kg`;
   document.getElementById("dietTag").textContent = info.diet;
   document.getElementById("deficitTag").textContent = info.deficit;
 
-  const pBadge = document.getElementById("phaseBadge");
-  pBadge.textContent = info.phase;
-  pBadge.style.backgroundColor = info.phaseBg;
-  pBadge.style.color = info.phaseColor;
+  document.getElementById("phaseBadge").textContent = info.phase;
+  document.getElementById("roadmapPhaseBadge").textContent = info.phase;
+
+  // Segmentli yol haritasını güncelleme
+  for (let i = 1; i <= 6; i++) {
+    const seg = document.getElementById(`seg${i}`);
+    const step = document.getElementById(`pstep${i}`);
+    if (seg) {
+      seg.className = "phase-segment";
+      if (i < info.phaseNum) seg.classList.add("passed");
+      if (i === info.phaseNum) seg.classList.add("active");
+    }
+    if (step) {
+      step.className = "phase-step-btn";
+      if (i === info.phaseNum) step.classList.add("current");
+    }
+  }
 
   const todayIndex = getTodayIndex();
   document.getElementById("todayBackBtn").style.display = (currentDay !== todayIndex) ? "inline-block" : "none";
@@ -916,13 +1394,33 @@ function renderUI() {
     dayCard.classList.remove("tavuk-active");
   }
 
-  document.getElementById("inputWeight").value = dData.weight !== undefined ? dData.weight : "";
-  document.getElementById("inputCheat").value = dData.cheat !== undefined ? dData.cheat : "";
-  document.getElementById("inputNeck").value = dData.neck !== undefined ? dData.neck : "";
-  document.getElementById("inputWaist").value = dData.waist !== undefined ? dData.waist : "";
-  document.getElementById("inputArm").value = dData.arm !== undefined ? dData.arm : "";
-  document.getElementById("inputShoulder").value = dData.shoulder !== undefined ? dData.shoulder : "";
+  document.getElementById("inputWeight").value = (dData.weight !== undefined && dData.weight !== null) ? dData.weight : "";
+  document.getElementById("inputCheat").value = (dData.cheat !== undefined && dData.cheat !== null) ? dData.cheat : "";
+  document.getElementById("inputNeck").value = (dData.neck !== undefined && dData.neck !== null) ? dData.neck : "";
+  document.getElementById("inputWaist").value = (dData.waist !== undefined && dData.waist !== null) ? dData.waist : "";
+  document.getElementById("inputArm").value = (dData.arm !== undefined && dData.arm !== null) ? dData.arm : "";
+  document.getElementById("inputShoulder").value = (dData.shoulder !== undefined && dData.shoulder !== null) ? dData.shoulder : "";
 
+  // GÜNLÜK HEDEFE OLAN UZAKLIK
+  const dailyDiffEl = document.getElementById("dailyTargetDiffVal");
+  if (dData.weight && Number(dData.weight) > 0) {
+    const diffDay = Number(dData.weight) - Number(info.targetWeight);
+    if (diffDay > 0.05) {
+      dailyDiffEl.textContent = `+${diffDay.toFixed(2)} kg`;
+      dailyDiffEl.style.color = "var(--accent-rose)";
+    } else if (diffDay < -0.05) {
+      dailyDiffEl.textContent = `${diffDay.toFixed(2)} kg`;
+      dailyDiffEl.style.color = "var(--accent-green)";
+    } else {
+      dailyDiffEl.textContent = "Tam Hedefte (0.00)";
+      dailyDiffEl.style.color = "var(--accent-cyan)";
+    }
+  } else {
+    dailyDiffEl.textContent = "-- kg";
+    dailyDiffEl.style.color = "var(--text-dim)";
+  }
+
+  // VÜCUT ÖLÇÜLERİ VE YAĞ HESABI
   const navyCard = document.getElementById("navyResultCard");
   const navyActualVal = document.getElementById("navyActualVal");
   const navyDiffText = document.getElementById("navyDiffText");
@@ -946,15 +1444,15 @@ function renderUI() {
       const absDiff = Math.abs(diff).toFixed(1);
 
       if (diff <= -0.2) {
-        navyDiffText.innerHTML = `<span style="color: #34d399;">⚡ Hedefin %${absDiff} ÖNÜNDESİN! (Hedef: %${info.bfPct})</span>`;
+        navyDiffText.innerHTML = `<span style="color: var(--accent-green);">⚡ Hedefin %${absDiff} ÖNÜNDESİN (Hedef: %${info.bfPct})</span>`;
       } else if (diff >= 0.2) {
-        navyDiffText.innerHTML = `<span style="color: #f87171;">⚠️ Hedefin %${absDiff} GERİSİNDESİN (Hedef: %${info.bfPct})</span>`;
+        navyDiffText.innerHTML = `<span style="color: var(--accent-rose);">⚠️ Hedefin %${absDiff} GERİSİNDESİN (Hedef: %${info.bfPct})</span>`;
       } else {
-        navyDiffText.innerHTML = `<span style="color: #60a5fa;">🎯 HEDEFE BİREBİR UYUMLUSUN! (Hedef: %${info.bfPct})</span>`;
+        navyDiffText.innerHTML = `<span style="color: var(--accent-cyan);">🎯 HEDEFE BİREBİR UYUMLUSUN (Hedef: %${info.bfPct})</span>`;
       }
 
-      vTaperStat.textContent = res.vTaper ? `V-Taper: ${res.vTaper} (İdeal: 1.61)` : `Kol: ${armVal || '-'} cm`;
-      leanMassStat.textContent = res.lbm ? `Yağsız Kütle: ${res.lbm} kg` : `Hedef Yağ: %${info.bfPct}`;
+      vTaperStat.textContent = res.vTaper ? `V-Taper: ${res.vTaper}` : `Kol: ${armVal || '-'} cm`;
+      leanMassStat.textContent = res.lbm ? `Yağsız: ${res.lbm} kg` : `Hedef: %${info.bfPct}`;
     } else {
       navyCard.classList.remove("active");
     }
@@ -962,10 +1460,11 @@ function renderUI() {
     navyCard.classList.remove("active");
   }
 
+  // BORÇ GÜN HESABI
   const debtEl = document.getElementById("dayDebtText");
   if (dData.cheat && Number(dData.cheat) > 0) {
-    const dayDebt = (Number(dData.cheat) / BASE_DEFICIT).toFixed(2);
-    debtEl.textContent = `+${dayDebt} Gün Borç (${dData.cheat} kcal / 1050)`;
+    const dayDebt = (Number(dData.cheat) / BASE_DEFICIT).toFixed(1);
+    debtEl.textContent = `+${dayDebt} Gün Borç (${dData.cheat} kcal)`;
   } else {
     debtEl.textContent = "";
   }
@@ -979,10 +1478,10 @@ function toggleDietAction() {
   if (!localStore[dKey]) localStore[dKey] = { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
 
   localStore[dKey].tavuk = !localStore[dKey].tavuk;
-  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+  localStorage.setItem("protokol_260_studio_store", JSON.stringify(localStore));
 
   renderUI();
-  showToast();
+  showToast("Kaydedildi");
   syncPushToSheets(dKey, localStore[dKey]);
 }
 
@@ -996,9 +1495,9 @@ function saveMeasurementInput() {
   localStore[dKey].arm = document.getElementById("inputArm").value;
   localStore[dKey].shoulder = document.getElementById("inputShoulder").value;
 
-  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+  localStorage.setItem("protokol_260_studio_store", JSON.stringify(localStore));
   renderUI();
-  showToast("Ölçüler Kaydedildi & Tabloya İletiliyor! 📐");
+  showToast("Kaydedildi");
   syncPushToSheets(dKey, localStore[dKey]);
 }
 
@@ -1009,8 +1508,9 @@ function saveWeightInput() {
   if (!localStore[dKey]) localStore[dKey] = { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
 
   localStore[dKey].weight = val;
-  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
-  showToast();
+  localStorage.setItem("protokol_260_studio_store", JSON.stringify(localStore));
+  renderUI();
+  showToast("Kaydedildi");
   syncPushToSheets(dKey, localStore[dKey]);
 }
 
@@ -1021,9 +1521,9 @@ function saveCheatInput() {
   if (!localStore[dKey]) localStore[dKey] = { tavuk: false, weight: "", cheat: "", neck: "", waist: "", arm: "", shoulder: "" };
 
   localStore[dKey].cheat = val;
-  localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+  localStorage.setItem("protokol_260_studio_store", JSON.stringify(localStore));
   renderUI();
-  showToast();
+  showToast("Kaydedildi");
   syncPushToSheets(dKey, localStore[dKey]);
 }
 
@@ -1031,6 +1531,7 @@ function renderGlobalStats() {
   let tavukC = 0;
   let totalCheat = 0;
   let maxDay = 0;
+  let latestKnownWeight = null;
 
   for (let i = 1; i <= TOTAL_DAYS; i++) {
     const code = `G${String(i).padStart(3, '0')}`;
@@ -1038,6 +1539,7 @@ function renderGlobalStats() {
     if (d) {
       if (d.tavuk) tavukC++;
       if (d.cheat && Number(d.cheat) > 0) totalCheat += Number(d.cheat);
+      if (d.weight && Number(d.weight) > 0) latestKnownWeight = Number(d.weight);
       if (d.tavuk || d.weight || d.cheat || d.waist) maxDay = Math.max(maxDay, i);
     }
   }
@@ -1047,7 +1549,7 @@ function renderGlobalStats() {
 
   const totalPct = ((currentActive / TOTAL_DAYS) * 100).toFixed(1);
   const dietPct = ((tavukC / TOTAL_DAYS) * 100).toFixed(1);
-  const totalDebtDays = (totalCheat / BASE_DEFICIT).toFixed(2);
+  const totalDebtDays = (totalCheat / BASE_DEFICIT).toFixed(1);
 
   document.getElementById("totalPct").textContent = `${totalPct}%`;
   document.getElementById("progressBar").style.width = `${totalPct}%`;
@@ -1055,6 +1557,16 @@ function renderGlobalStats() {
   document.getElementById("dietPct").textContent = `${dietPct}%`;
   document.getElementById("totalCheatVal").textContent = `${totalCheat.toLocaleString('tr-TR')} kcal`;
   document.getElementById("totalDebtVal").textContent = `${totalDebtDays} GÜN`;
+
+  // Nihai Hedefe (89.14 kg) Kalan Kilo
+  const currentW = latestKnownWeight || Number(calculateDay(currentActive).targetWeight);
+  const dist = currentW - CUT_TARGET_WEIGHT;
+  const distEl = document.getElementById("targetDistanceVal");
+  if (dist > 0) {
+    distEl.textContent = `-${dist.toFixed(1)} kg`;
+  } else {
+    distEl.textContent = `+${Math.abs(dist).toFixed(1)} kg`;
+  }
 }
 
 function changeDay(offset) {
@@ -1074,19 +1586,19 @@ function goToToday() {
   renderUI();
 }
 
-function showToast(msg = "Kaydedildi & E-Tabloya Yazıldı! ⚡") {
+function showToast(msg = "Kaydedildi") {
   const t = document.getElementById("toast");
   t.textContent = msg;
   t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 1400);
+  setTimeout(() => t.classList.remove("show"), 1200);
 }
 
-// 1. PULL DATA FROM GOOGLE SHEETS
+// GOOGLE SHEETS'TEN VERİLERİ ÇEK
 function pullDataFromSheets(showNotification = false) {
   const badge = document.getElementById("liveBadge");
   const statusTxt = document.getElementById("syncStatus");
   badge.className = "live-badge syncing";
-  statusTxt.textContent = "VERİLER ÇEKİLİYOR...";
+  statusTxt.textContent = "SENKRON...";
 
   fetch(GAS_API_URL, {
     method: "GET",
@@ -1096,38 +1608,39 @@ function pullDataFromSheets(showNotification = false) {
   .then(res => {
     if (res && res.status === "success" && res.data) {
       for (const [dayCode, rowData] of Object.entries(res.data)) {
-        if (!localStore[dayCode]) localStore[dayCode] = {};
-        if (rowData.tavuk !== undefined) localStore[dayCode].tavuk = rowData.tavuk;
-        if (rowData.weight !== "") localStore[dayCode].weight = rowData.weight;
-        if (rowData.cheat !== "") localStore[dayCode].cheat = rowData.cheat;
-        if (rowData.waist !== "") localStore[dayCode].waist = rowData.waist;
-        if (rowData.arm !== "") localStore[dayCode].arm = rowData.arm;
-        if (rowData.neck !== "") localStore[dayCode].neck = rowData.neck;
-        if (rowData.shoulder !== "") localStore[dayCode].shoulder = rowData.shoulder;
+        localStore[dayCode] = {
+          tavuk: rowData.tavuk === true || String(rowData.tavuk).toUpperCase() === "TRUE",
+          weight: (rowData.weight !== undefined && rowData.weight !== null && rowData.weight !== "") ? rowData.weight : "",
+          cheat: (rowData.cheat !== undefined && rowData.cheat !== null && rowData.cheat !== "") ? rowData.cheat : "",
+          waist: (rowData.waist !== undefined && rowData.waist !== null && rowData.waist !== "") ? rowData.waist : "",
+          arm: (rowData.arm !== undefined && rowData.arm !== null && rowData.arm !== "") ? rowData.arm : "",
+          neck: (rowData.neck !== undefined && rowData.neck !== null && rowData.neck !== "") ? rowData.neck : "",
+          shoulder: (rowData.shoulder !== undefined && rowData.shoulder !== null && rowData.shoulder !== "") ? rowData.shoulder : ""
+        };
       }
-      localStorage.setItem("protokol_260_master_final_store", JSON.stringify(localStore));
+      localStorage.setItem("protokol_260_studio_store", JSON.stringify(localStore));
       renderUI();
-      badge.className = "live-badge";
-      statusTxt.textContent = "CANLI SENKRON ✅";
-      if (showNotification) showToast("Tablodaki tüm veriler çekildi! 📥");
+      badge.className = "live-badge synced";
+      statusTxt.textContent = "CANLI";
+      if (showNotification) showToast("Güncellendi");
     } else {
-      badge.className = "live-badge";
-      statusTxt.textContent = "CANLI SENKRON ✅";
+      badge.className = "live-badge synced";
+      statusTxt.textContent = "CANLI";
     }
   })
   .catch(err => {
     console.warn("Pull warning:", err);
     badge.className = "live-badge error";
-    statusTxt.textContent = "LOKALDE KAYITLI";
+    statusTxt.textContent = "LOKAL";
   });
 }
 
-// 2. PUSH DATA TO GOOGLE SHEETS
+// GOOGLE SHEETS'E VERİLERİ YAZ
 function syncPushToSheets(dayCode, dayData) {
   const badge = document.getElementById("liveBadge");
   const statusTxt = document.getElementById("syncStatus");
   badge.className = "live-badge syncing";
-  statusTxt.textContent = "YAZILIYOR...";
+  statusTxt.textContent = "KAYDEDİLİYOR...";
 
   const params = new URLSearchParams({
     action: "update",
@@ -1148,16 +1661,16 @@ function syncPushToSheets(dayCode, dayData) {
     mode: "no-cors",
     cache: "no-cache"
   }).then(() => {
-    badge.className = "live-badge";
-    statusTxt.textContent = "CANLI SENKRON ✅";
+    badge.className = "live-badge synced";
+    statusTxt.textContent = "CANLI";
   }).catch(err => {
     console.warn("Push warning:", err);
     badge.className = "live-badge error";
-    statusTxt.textContent = "LOKALDE KAYITLI";
+    statusTxt.textContent = "LOKAL";
   });
 }
 
-// Initial Run
+// Başlangıç Çalıştırması
 currentDay = getTodayIndex();
 renderUI();
 pullDataFromSheets(false);
